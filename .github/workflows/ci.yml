@@ -25,11 +25,11 @@ jobs:
 
     steps:
     - name: Clone DeployMetatrader repository
-      uses: junaidrahim/clone-github-repo-action@v1.2
+      uses: GuillaumeFalourd/clone-github-repo-action@v2.3
       with:
-        repository-url: https://github.com/PinkPanther-ny/DeployMetatrader.git
-        personal-access-token: ${{ secrets.DEPLOY_REPO_PAT }}
-        target-directory: DeployMetatrader
+        repository: PinkPanther-ny/DeployMetatrader
+        token: ${{ secrets.DEPLOY_REPO_PAT }}
+        path: DeployMetatrader
 
     - name: Copy Compiled EX4 to Target Path
       run: |
