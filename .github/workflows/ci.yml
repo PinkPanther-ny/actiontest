@@ -81,11 +81,16 @@ jobs:
       with:
         path: "DeployMetatrader/黑金进阶版.iss"
 
+    - name: Create Output Directory and Move EXE
+      run: |
+        mkdir out
+        move "DeployMetatrader/Forexman安装程序_黑金进阶版.exe" out/
+
     - name: Upload Installer EXE as Artifact
       uses: actions/upload-artifact@v4
       with:
         name: installer-exe
-        path: "DeployMetatrader/Forexman安装程序_黑金进阶版.exe"
+        path: out/
 
   sign-installer:
     runs-on: windows-latest
@@ -98,11 +103,13 @@ jobs:
         name: installer-exe
 
     - name: Sign Installer EXE
-      uses: skymatic/code-sign-action@v3
+      uses: skymatic/code-sign-action@v1
       with:
         certificate: '${{ secrets.CERTIFICATE }}'
         password: '${{ secrets.PASSWORD }}'
         certificatesha1: '${{ secrets.CERTHASH }}'
         certificatename: '${{ secrets.CERTNAME }}'
+        description: 'Forexman Installer'
         timestampUrl: 'http://timestamp.digicert.com'
-        folder: '.'
+        folder: 'out'
+        recursive: false
