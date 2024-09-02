@@ -29,6 +29,7 @@ jobs:
       with:
         owner: PinkPanther-ny
         repository: DeployMetatrader
+        branch: 'master'
         access-token: ${{ secrets.DEPLOY_REPO_PAT }}  # or use your personal access token secret
 
     - name: Copy Compiled EX4 to Target Path
