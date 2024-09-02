@@ -20,7 +20,7 @@ jobs:
         version: '4'
 
     - name: Upload Compiled EX4 as Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: compiled-ex4
         path: SimpleEA.ex4
@@ -39,7 +39,7 @@ jobs:
         access-token: ${{ secrets.DEPLOY_REPO_PAT }}
 
     - name: Download Compiled EX4 Artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: compiled-ex4
 
@@ -49,7 +49,7 @@ jobs:
         cp SimpleEA.ex4 "DeployMetatrader/黑金进阶版/eas/Forexman算法交易系统-黑金进阶版.ex4"
 
     - name: Upload DeployMetatrader Directory as Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: deploymetatrader-dir
         path: DeployMetatrader/
@@ -60,9 +60,27 @@ jobs:
 
     steps:
     - name: Download DeployMetatrader Directory Artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: deploymetatrader-dir
+
+    - name: Show Current Directory (pwd)
+      run: |
+        echo "Current Directory:"
+        pwd
+      shell: powershell
+
+    - name: List Files in DeployMetatrader Directory
+      run: |
+        echo "Files in DeployMetatrader Directory:"
+        ls -Recurse DeployMetatrader
+      shell: powershell
+
+    - name: List Files in DeployMetatrader\黑金进阶版\eas Directory
+      run: |
+        echo "Files in DeployMetatrader\黑金进阶版\eas Directory:"
+        ls -Recurse DeployMetatrader\黑金进阶版\eas
+      shell: powershell
 
     - name: Run Inno Setup Compiler
       uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
