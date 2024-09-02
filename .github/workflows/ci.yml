@@ -91,7 +91,23 @@ jobs:
       with:
         name: installer-exe
         path: out/
-
+    - name: Show Current Directory
+      run: |
+        echo "Current Directory:"
+        pwd
+      shell: powershell
+  
+    - name: List Files in Current Directory
+      run: |
+        echo "Files in Current Directory:"
+        ls -Recurse
+      shell: powershell
+  
+    - name: List Files in 'out' Directory
+      run: |
+        echo "Files in 'out' Directory:"
+        ls -Recurse out
+      shell: powershell
   sign-installer:
     runs-on: windows-latest
     needs: compile-installer
