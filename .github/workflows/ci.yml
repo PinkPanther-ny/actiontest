@@ -48,11 +48,16 @@ jobs:
         mkdir -p "DeployMetatrader/黑金进阶版/eas"
         cp SimpleEA.ex4 "DeployMetatrader/黑金进阶版/eas/Forexman算法交易系统-黑金进阶版.ex4"
 
+    - name: List Files in DeployMetatrader Directory Before Upload
+      run: |
+        echo "Listing files in DeployMetatrader directory before uploading artifact:"
+        ls -R DeployMetatrader
+
     - name: Upload DeployMetatrader Directory as Artifact
       uses: actions/upload-artifact@v4
       with:
         name: deploymetatrader-dir
-        path: DeployMetatrader/**  # Ensures all contents are uploaded
+        path: DeployMetatrader/**
 
   compile-installer:
     runs-on: windows-latest
