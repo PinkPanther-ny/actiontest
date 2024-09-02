@@ -54,15 +54,15 @@ jobs:
 
     steps:
     - name: Checkout DeployMetatrader repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         repository: PinkPanther-ny/DeployMetatrader
         path: DeployMetatrader
 
     - name: Run Inno Setup Compiler
-      uses: idleberg/innosetup-action@v1
+      uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
       with:
-        script: "DeployMetatrader/黑金进阶版.iss"
+        path: "DeployMetatrader/黑金进阶版.iss"
 
   sign-installer:
     runs-on: windows-latest
