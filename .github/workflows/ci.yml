@@ -90,7 +90,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: installer-exe
-        path: out
+        path: out/
     - name: Show Current Directory
       run: |
         echo "Current Directory:"
@@ -132,5 +132,23 @@ jobs:
         certificatename: '${{ secrets.CERTNAME }}'
         description: 'Forexman Installer'
         timestampUrl: 'http://timestamp.digicert.com'
-        folder: 'out'
+        folder: '.'
         recursive: false
+
+    - name: Download DeployMetatrader Directory Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: deploymetatrader-dir
+        path: "DeployMetatrader"
+          
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+  
+    - name: Install Python dependencies
+      run: pip install -r requirements.txt
+  
+    - name: Run Python Upload Script
+      run: |
+        python upload.py -p "Forexman算法交易系统 - 黑金进阶版" -f "out/Forexman安装程序_黑金进阶版.exe"
