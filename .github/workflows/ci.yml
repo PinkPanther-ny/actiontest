@@ -1,36 +1,20 @@
-name: Build EA
+name: Compile MQL4
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  build:
-    runs-on: windows-latest
+  compile:
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Install MetaEditor
-      run: |
-        # Download MetaTrader 4 setup (to get MetaEditor)
-        Invoke-WebRequest -Uri "https://download.mql5.com/cdn/web/metaquotes.software.corp/mt4/mt4setup.exe" -OutFile "C:\mt4setup.exe"
-        # Silent install MetaTrader 4 to get MetaEditor
-        Start-Process -FilePath "C:\mt4setup.exe" -ArgumentList "/silent /install" -Wait
-
-    - name: Compile EA using MetaEditor
-      run: |
-        "C:\Program Files (x86)\MetaTrader 4\metaeditor.exe" /compile:"EAs\SimpleEA.mq4" /log
-
-    - name: Check if EA compiled successfully
-      run: |
-        if (!(Test-Path "EAs\SimpleEA.ex4")) {
-          Write-Error "EA compilation failed!"
-        } else {
-          echo "EA compiled successfully."
-        }
+    - name: Run MetaEditor Compiler
+      uses: mhriemers/metatrader-compile@v1.0.1
+      with:
+        files: 'SimpleEA.mq4'  # or specify the path if the file is in a different folder
+        version: '4'  # MetaTrader version 4 or 5
