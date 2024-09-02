@@ -133,7 +133,12 @@ jobs:
     
     - name: Install Python dependencies
       run: pip install -r DeployMetatrader/requirements.txt
+
+    - name: Set UTF-8 Code Page
+      run: chcp 65001
     
     - name: Run Python Upload Script
+      env:
+        PYTHONIOENCODING: utf-8
       run: |
         python DeployMetatrader/upload.py -p "Forexman算法交易系统 - 黑金进阶版" -f "out/Forexman安装程序_黑金进阶版.exe"
