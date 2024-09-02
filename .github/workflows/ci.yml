@@ -48,50 +48,23 @@ jobs:
         mkdir -p "DeployMetatrader/黑金进阶版/eas"
         cp SimpleEA.ex4 "DeployMetatrader/黑金进阶版/eas/Forexman算法交易系统-黑金进阶版.ex4"
 
+    - name: Upload DeployMetatrader Directory as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: deploymetatrader-dir
+        path: DeployMetatrader/
+
   compile-installer:
     runs-on: windows-latest
     needs: copy-ex4
 
     steps:
-    - name: Checkout DeployMetatrader repository
-      uses: actions/checkout@v4
+    - name: Download DeployMetatrader Directory Artifact
+      uses: actions/download-artifact@v2
       with:
-        repository: PinkPanther-ny/DeployMetatrader
-        path: DeployMetatrader
+        name: deploymetatrader-dir
 
     - name: Run Inno Setup Compiler
       uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
       with:
         path: "DeployMetatrader/黑金进阶版.iss"
-
-  sign-installer:
-    runs-on: windows-latest
-    needs: compile-installer
-
-    steps:
-    - name: Sign Installer
-      uses: Delphier/SignTool@v1
-      with:
-        file: "DeployMetatrader/Forexman安装程序_黑金进阶版.exe"
-        cert: "D:\\Code\\DeployMetatrader\\Forexman Investments (Shanghai) Ltd.pfx"
-        password: ${{ secrets.CERT_PASSWORD }}
-        timestamp: "http://timestamp.digicert.com"
-        digest_algorithm: "SHA256"
-        timestamp_algorithm: "SHA256"
-
-  upload-installer:
-    runs-on: ubuntu-latest
-    needs: sign-installer
-
-    steps:
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
-    - name: Install Python dependencies
-      run: pip install -r requirements.txt
-
-    - name: Upload Installer
-      run: |
-        python upload.py -p "Forexman算法交易系统 - 黑金进阶版" -f "DeployMetatrader/Forexman安装程序_黑金进阶版.exe"
