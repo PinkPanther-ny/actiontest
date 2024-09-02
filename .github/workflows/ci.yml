@@ -117,7 +117,12 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: installer-exe
-
+    - name: List Files in Current Directory
+      run: |
+        echo "Files in Current Directory:"
+        ls -Recurse
+      shell: powershell
+  
     - name: Sign Installer EXE
       uses: skymatic/code-sign-action@v1
       with:
