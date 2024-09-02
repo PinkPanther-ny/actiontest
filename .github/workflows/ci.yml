@@ -21,15 +21,15 @@ jobs:
 
   copy-ex4:
     runs-on: ubuntu-latest
-    needs: compile  # This job will only start after 'compile' finishes successfully
+    needs: compile
 
     steps:
-    - name: Checkout DeployMetatrader repository
-      uses: actions/checkout@v2
+    - name: Clone DeployMetatrader repository
+      uses: junaidrahim/clone-github-repo-action@v1.2
       with:
-        repository: PinkPanther-ny/DeployMetatrader
-        token: ${{ secrets.GITHUB_TOKEN }}
-        path: DeployMetatrader
+        repository-url: https://github.com/PinkPanther-ny/DeployMetatrader.git
+        personal-access-token: ${{ secrets.DEPLOY_REPO_PAT }}
+        target-directory: DeployMetatrader
 
     - name: Copy Compiled EX4 to Target Path
       run: |
@@ -38,7 +38,7 @@ jobs:
 
   compile-installer:
     runs-on: windows-latest
-    needs: copy-ex4  # This job will only start after 'copy-ex4' finishes successfully
+    needs: copy-ex4
 
     steps:
     - name: Checkout DeployMetatrader repository
@@ -54,7 +54,7 @@ jobs:
 
   sign-installer:
     runs-on: windows-latest
-    needs: compile-installer  # This job will only start after 'compile-installer' finishes successfully
+    needs: compile-installer
 
     steps:
     - name: Sign Installer
@@ -69,7 +69,7 @@ jobs:
 
   upload-installer:
     runs-on: ubuntu-latest
-    needs: sign-installer  # This job will only start after 'sign-installer' finishes successfully
+    needs: sign-installer
 
     steps:
     - name: Set up Python
