@@ -21,6 +21,7 @@ jobs:
 
   copy-ex4:
     runs-on: ubuntu-latest
+    needs: compile  # This job will only start after 'compile' finishes successfully
 
     steps:
     - name: Checkout DeployMetatrader repository
@@ -37,6 +38,7 @@ jobs:
 
   compile-installer:
     runs-on: windows-latest
+    needs: copy-ex4  # This job will only start after 'copy-ex4' finishes successfully
 
     steps:
     - name: Checkout DeployMetatrader repository
@@ -52,6 +54,7 @@ jobs:
 
   sign-installer:
     runs-on: windows-latest
+    needs: compile-installer  # This job will only start after 'compile-installer' finishes successfully
 
     steps:
     - name: Sign Installer
@@ -66,6 +69,7 @@ jobs:
 
   upload-installer:
     runs-on: ubuntu-latest
+    needs: sign-installer  # This job will only start after 'sign-installer' finishes successfully
 
     steps:
     - name: Set up Python
