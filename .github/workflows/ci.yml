@@ -76,18 +76,6 @@ jobs:
         pwd
       shell: powershell
 
-    - name: List Files in DeployMetatrader Directory
-      run: |
-        echo "Files in DeployMetatrader Directory:"
-        ls -Recurse DeployMetatrader
-      shell: powershell
-
-    - name: List Files in DeployMetatrader\黑金进阶版\eas Directory
-      run: |
-        echo "Files in DeployMetatrader\黑金进阶版\eas Directory:"
-        ls -Recurse DeployMetatrader\黑金进阶版\eas
-      shell: powershell
-
     - name: Run Inno Setup Compiler
       uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
       with:
