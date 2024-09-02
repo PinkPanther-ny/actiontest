@@ -48,11 +48,6 @@ jobs:
         mkdir -p "DeployMetatrader/黑金进阶版/eas"
         cp SimpleEA.ex4 "DeployMetatrader/黑金进阶版/eas/Forexman算法交易系统-黑金进阶版.ex4"
 
-    - name: List Files in DeployMetatrader Directory Before Upload
-      run: |
-        echo "Listing files in DeployMetatrader directory before uploading artifact:"
-        ls -R DeployMetatrader
-
     - name: Upload DeployMetatrader Directory as Artifact
       uses: actions/upload-artifact@v4
       with:
@@ -96,18 +91,7 @@ jobs:
         echo "Current Directory:"
         pwd
       shell: powershell
-  
-    - name: List Files in Current Directory
-      run: |
-        echo "Files in Current Directory:"
-        ls -Recurse
-      shell: powershell
-  
-    - name: List Files in 'out' Directory
-      run: |
-        echo "Files in 'out' Directory:"
-        ls -Recurse out
-      shell: powershell
+
   sign-installer:
     runs-on: windows-latest
     needs: compile-installer
@@ -117,6 +101,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: installer-exe
+
     - name: List Files in Current Directory
       run: |
         echo "Files in Current Directory:"
