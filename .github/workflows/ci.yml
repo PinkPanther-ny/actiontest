@@ -27,9 +27,9 @@ jobs:
     - name: Clone DeployMetatrader repository
       uses: GuillaumeFalourd/clone-github-repo-action@v2.3
       with:
-        repository: PinkPanther-ny/DeployMetatrader
-        token: ${{ secrets.DEPLOY_REPO_PAT }}
-        path: DeployMetatrader
+        owner: PinkPanther-ny
+        repository: DeployMetatrader
+        access-token: ${{ secrets.DEPLOY_REPO_PAT }}  # or use your personal access token secret
 
     - name: Copy Compiled EX4 to Target Path
       run: |
