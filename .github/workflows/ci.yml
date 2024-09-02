@@ -18,7 +18,10 @@ jobs:
       with:
         files: 'SimpleEA.mq4'
         version: '4'
-
+    - name: List files in directory
+      run: ls
+    - name: show pwd
+      run: pwd
   copy-ex4:
     runs-on: ubuntu-latest
     needs: compile
@@ -31,7 +34,10 @@ jobs:
         repository: DeployMetatrader
         branch: 'master'
         access-token: ${{ secrets.DEPLOY_REPO_PAT }}  # or use your personal access token secret
-
+    - name: List files in directory
+      run: ls
+    - name: show pwd
+      run: pwd
     - name: Copy Compiled EX4 to Target Path
       run: |
         mkdir -p "DeployMetatrader/黑金进阶版/eas"
