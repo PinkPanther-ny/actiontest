@@ -1,4 +1,4 @@
-name: Compile MQL4
+name: CI/CD Pipeline for MetaTrader Deployment
 
 on:
   push:
@@ -6,15 +6,77 @@ on:
       - main
 
 jobs:
-  compile:
+  compile-mql4:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Compile MQL4 to EX4
+        uses: mhriemers/metatrader-compile@v1.0.1
+        with:
+          files: 'SimpleEA.mq4'
+          version: '4'
 
-    - name: Run MetaEditor Compiler
-      uses: mhriemers/metatrader-compile@v1.0.1
-      with:
-        files: 'SimpleEA.mq4'  # or specify the path if the file is in a different folder
-        version: '4'  # MetaTrader version 4 or 5
+  copy-and-rename-ex4:
+    runs-on: ubuntu-latest
+    needs: compile-mql4
+    steps:
+      - name: Checkout DeployMetatrader repository
+        uses: actions/checkout@v2
+        with:
+          repository: PinkPanther-ny/DeployMetatrader
+          path: DeployMetatrader
+
+      - name: Copy and Rename EX4 File
+        run: |
+          mkdir -p DeployMetatrader/黑金进阶版/eas
+          cp SimpleEA.ex4 DeployMetatrader/黑金进阶版/eas/Forexman算法交易系统-黑金进阶版.ex4
+
+  compile-setup:
+    runs-on: windows-latest
+    needs: copy-and-rename-ex4
+    steps:
+      - name: Checkout DeployMetatrader repository
+        uses: actions/checkout@v2
+        with:
+          repository: PinkPanther-ny/DeployMetatrader
+          path: DeployMetatrader
+      
+      - name: Compile Installer with Inno Setup
+        uses: idleberg/innosetup-action@v1
+        with:
+          script: 'DeployMetatrader/黑金进阶版.iss'
+
+  sign-installer:
+    runs-on: windows-latest
+    needs: compile-setup
+    steps:
+      - name: Sign the Installer
+        uses: delphier/signtool@v1
+        with:
+          cert-file: 'D:\cert\Forexman Investments (Shanghai) Ltd.pfx'
+          password: ${{ secrets.CERT_PASSWORD }}
+          input: 'D:\Code\DeployMetatrader\Forexman安装程序_黑金进阶版.exe'
+          timestamp-url: 'http://timestamp.digicert.com'
+
+  upload-installer:
+    runs-on: ubuntu-latest
+    needs: sign-installer
+    steps:
+      - name: Checkout DeployMetatrader repository
+        uses: actions/checkout@v2
+        with:
+          repository: PinkPanther-ny/DeployMetatrader
+          path: DeployMetatrader
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install Dependencies
+        run: pip install -r DeployMetatrader/requirements.txt
+
+      - name: Upload Installer
+        run: python DeployMetatrader/upload.py -p "Forexman算法交易系统 - 黑金进阶版" -f "Forexman安装程序_黑金进阶版.exe"
