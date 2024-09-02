@@ -77,6 +77,6 @@ jobs:
       shell: powershell
 
     - name: Run Inno Setup Compiler
-      uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+      uses: Minionguyjpro/Inno-Setup-Action@v1.2.4
       with:
         path: "DeployMetatrader/黑金进阶版.iss"
