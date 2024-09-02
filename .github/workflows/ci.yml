@@ -18,10 +18,13 @@ jobs:
       with:
         files: 'SimpleEA.mq4'
         version: '4'
-    - name: List files in directory
-      run: ls
-    - name: show pwd
-      run: pwd
+
+    - name: Upload Compiled EX4 as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: compiled-ex4
+        path: SimpleEA.ex4
+
   copy-ex4:
     runs-on: ubuntu-latest
     needs: compile
@@ -33,11 +36,13 @@ jobs:
         owner: PinkPanther-ny
         repository: DeployMetatrader
         branch: 'master'
-        access-token: ${{ secrets.DEPLOY_REPO_PAT }}  # or use your personal access token secret
-    - name: List files in directory
-      run: ls
-    - name: show pwd
-      run: pwd
+        access-token: ${{ secrets.DEPLOY_REPO_PAT }}
+
+    - name: Download Compiled EX4 Artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: compiled-ex4
+
     - name: Copy Compiled EX4 to Target Path
       run: |
         mkdir -p "DeployMetatrader/黑金进阶版/eas"
