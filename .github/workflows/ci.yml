@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
     - name: Run MetaEditor Compiler
       uses: mhriemers/metatrader-compile@v1.0.1
@@ -45,7 +47,6 @@ jobs:
       run: |
         mkdir -p "DeployMetatrader/黑金进阶版/eas"
         cp SimpleEA.ex4 "DeployMetatrader/黑金进阶版/eas/Forexman算法交易系统-黑金进阶版.ex4"
-
     - name: Upload DeployMetatrader Directory as Artifact
       uses: actions/upload-artifact@v4
       with:
@@ -78,7 +79,6 @@ jobs:
       run: |
         mkdir out
         move "DeployMetatrader/Forexman安装程序_黑金进阶版.exe" out/
-
     - name: Upload Installer EXE as Artifact
       uses: actions/upload-artifact@v4
       with:
